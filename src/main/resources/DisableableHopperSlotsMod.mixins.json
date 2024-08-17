@@ -1,0 +1,14 @@
+{
+	"required": true,
+	"package": "com.fabien_gigante.mixin",
+	"compatibilityLevel": "JAVA_21",
+	"mixins": [
+		"HopperBlockEntityMixin",
+		"HopperScreenHandlerMixin",
+		"ServerPlayNetworkHandlerMixin",
+		"ScreenHandlerMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}
