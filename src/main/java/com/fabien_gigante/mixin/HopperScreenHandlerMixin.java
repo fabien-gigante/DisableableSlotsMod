@@ -7,24 +7,22 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import com.fabien_gigante.BitsPropertyDelegate;
 import com.fabien_gigante.DisableableSlot;
 import com.fabien_gigante.IDisableableSlots;
-import com.fabien_gigante.IPropertiesAccessor;
-import com.fabien_gigante.DisableableHopperSlotsMod;
 
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
-import net.minecraft.screen.ArrayPropertyDelegate;
 import net.minecraft.screen.HopperScreenHandler;
-import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.screen.slot.Slot;
 
 @Mixin(HopperScreenHandler.class)
 public abstract class HopperScreenHandlerMixin extends ScreenHandler implements IDisableableSlots {
-	@Shadow	protected Inventory inventory;
-	protected PropertyDelegate propertyDelegate;
+	@Shadow	
+	protected Inventory inventory;
+	protected BitsPropertyDelegate disabledSlots;
 
 	protected HopperScreenHandlerMixin(ScreenHandlerType<?> type, int syncId) { super(type, syncId); }
 
@@ -35,18 +33,18 @@ public abstract class HopperScreenHandlerMixin extends ScreenHandler implements 
 
 	@Inject(method = "<init>(ILnet/minecraft/entity/player/PlayerInventory;Lnet/minecraft/inventory/Inventory;)V", at = @At("TAIL"))
 	private void init(int syncId, PlayerInventory playerInventory, Inventory inventory, CallbackInfo ci) {
-		DisableableHopperSlotsMod.LOGGER.debug("HopperScreenHandlerMixin.init inventory.class={}", inventory.getClass());
-		this.propertyDelegate = inventory instanceof IPropertiesAccessor owner ? owner.getProperties() : new ArrayPropertyDelegate(HopperScreenHandler.SLOT_COUNT);
-		this.addProperties(this.propertyDelegate);
+		this.disabledSlots = inventory instanceof IDisableableSlots owner ? owner.getDisableableSlots() : new BitsPropertyDelegate(HopperScreenHandler.SLOT_COUNT);
+		this.addProperties(this.disabledSlots);
 	}
 
-	public boolean isSlotDisabled(int slot) {
-		return slot > -1 && slot < HopperScreenHandler.SLOT_COUNT ? this.propertyDelegate.get(slot) == 1 : false;
+	public BitsPropertyDelegate getDisableableSlots() { return this.disabledSlots; }
+
+	public boolean isSlotEnabled(int slot) {
+		return slot >= 0 && slot < HopperScreenHandler.SLOT_COUNT ? this.disabledSlots.get(slot) == 0 : true;
 	}
 
 	public void setSlotEnabled(int id, boolean enabled) {
-		DisableableHopperSlotsMod.LOGGER.debug("HopperScreenHandlerMixin.setSlotEnabled [{}]={}", id, enabled);
-		this.setProperty(id, enabled ? 0 : 1);
+		this.disabledSlots.set(id, enabled ? 0 : 1);
 		this.sendContentUpdates();
 	}
 }

@@ -7,7 +7,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.fabien_gigante.DisableableSlot;
 import com.fabien_gigante.IDisableableSlots;
-import com.fabien_gigante.DisableableHopperSlotsModClient;
 
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
@@ -34,33 +33,30 @@ public abstract class HopperScreenMixin extends HandledScreen<HopperScreenHandle
     
     @Inject(method="<init>", at=@At(value="TAIL"))
     private void init(HopperScreenHandler handler, PlayerInventory playerInventory, Text title, CallbackInfo ci) {
-		DisableableHopperSlotsModClient.LOGGER.debug("HopperScreenMixin.init");
         this.player = playerInventory.player;
     }
 
 	@Override
 	protected void onMouseClick(Slot slot, int slotId, int button, SlotActionType actionType) {
-		DisableableHopperSlotsModClient.LOGGER.debug("HopperScreenMixin.onMouseClick");
-		if (slot != null) DisableableHopperSlotsModClient.LOGGER.debug("- slot class={} id={} x={} y={}", slot.getClass(), slot.id, slot.x, slot.y);
 		if (slot instanceof DisableableSlot && !slot.hasStack() && !this.player.isSpectator()) {
 			switch (actionType) {
 				case PICKUP:
-					if (isSlotDisabled(slotId)) this.enableSlot(slotId);
+					if (this.isSlotDisabled(slotId)) this.enableSlot(slotId);
 					else if (this.handler.getCursorStack().isEmpty()) this.disableSlot(slotId);
 					break;
 				case SWAP:
 					ItemStack itemStack = this.player.getInventory().getStack(button);
-					if (isSlotDisabled(slotId) && !itemStack.isEmpty()) this.enableSlot(slotId);
+					if (this.isSlotDisabled(slotId) && !itemStack.isEmpty()) this.enableSlot(slotId);
+					break;
                 default:
 			}
 		}
 		super.onMouseClick(slot, slotId, button, actionType);
 	}
 
-	public boolean isSlotDisabled(int id) { return ((IDisableableSlots)this.handler).isSlotDisabled(id); }
+	public boolean isSlotEnabled(int id) { return ((IDisableableSlots)this.handler).isSlotEnabled(id); }
 
 	public void setSlotEnabled(int id, boolean enabled) {
-		DisableableHopperSlotsModClient.LOGGER.debug("HopperScreenMixin.setSlotEnabled [{}]={}", id, enabled);		
 		((IDisableableSlots)this.handler).setSlotEnabled(id, enabled);
 		super.onSlotChangedState(id, this.handler.syncId, enabled);
 		float f = enabled ? 1.0F : 0.75F;

@@ -14,6 +14,6 @@ public class DisableableSlot extends Slot {
 
 	@Override
 	public boolean canInsert(ItemStack stack) {
-		return handler.isSlotEnabled(id) && super.canInsert(stack);
+		return handler.isSlotEnabled(this.id) && super.canInsert(stack);
 	}    
 }

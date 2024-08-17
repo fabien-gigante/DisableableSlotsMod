@@ -1,16 +1,16 @@
 package com.fabien_gigante;
 
-import java.util.stream.IntStream;
-
 public interface IDisableableSlots {
-	public boolean isSlotDisabled(int id);
-	public default boolean isSlotEnabled(int id) { return !this.isSlotDisabled(id); }
+	public boolean isSlotEnabled(int id);
+	public default boolean isSlotDisabled(int id) { return !isSlotEnabled(id); }
 
 	public void setSlotEnabled(int id, boolean enabled);
 	public default void enableSlot(int id) { this.setSlotEnabled(id, true);}
 	public default void disableSlot(int id) { this.setSlotEnabled(id, false);}
 
-	public default int countEnabled(int startInclusive, int endExclusive) {
-		return (int)IntStream.range(startInclusive, endExclusive).filter(i -> isSlotEnabled(i)).count();
+	public default BitsPropertyDelegate getDisableableSlots() { return null; }
+	public default int countSlotsEnabled(boolean enabled) {
+		BitsPropertyDelegate disabledSlots = this.getDisableableSlots();
+		return disabledSlots == null ? -1 : disabledSlots.count(enabled ? 0 : 1);
 	}
 }

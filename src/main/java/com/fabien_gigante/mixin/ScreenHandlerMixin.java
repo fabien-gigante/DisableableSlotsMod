@@ -16,7 +16,7 @@ public abstract class ScreenHandlerMixin {
 	private static int capacity(Inventory inventory) {
 		int capacity = inventory.size();
 		if (inventory instanceof IDisableableSlots slots)
-			capacity = Math.min(slots.countEnabled(0, capacity), 1);
+			capacity = Math.min(slots.countSlotsEnabled(true), 1);
 		return capacity;
 	}
 }
