@@ -6,7 +6,9 @@
 		"HopperBlockEntityMixin",
 		"HopperScreenHandlerMixin",
 		"ServerPlayNetworkHandlerMixin",
-		"ScreenHandlerMixin"
+		"ScreenHandlerMixin",
+		"LithiumStackListMixin",
+		"HopperHelperMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

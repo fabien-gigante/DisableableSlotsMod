@@ -13,10 +13,5 @@ import com.fabien_gigante.IDisableableSlots;
 public abstract class ScreenHandlerMixin {
 	@Redirect(method = "calculateComparatorOutput(Lnet/minecraft/inventory/Inventory;)I", 
 		at = @At(value = "INVOKE", target = "Lnet/minecraft/inventory/Inventory;size()I", ordinal = 1))
-	private static int capacity(Inventory inventory) {
-		int capacity = inventory.size();
-		if (inventory instanceof IDisableableSlots slots)
-			capacity = Math.min(slots.countSlotsEnabled(true), 1);
-		return capacity;
-	}
+	private static int capacity(Inventory inventory) { return IDisableableSlots.getCapacity(inventory); }
 }
