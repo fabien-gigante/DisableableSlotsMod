@@ -19,7 +19,7 @@ public interface IDisableableSlots {
 	public static int getCapacity(Inventory inventory) {
 		int capacity = inventory.size();
 		if (inventory instanceof IDisableableSlots slots)
-			capacity = Math.min(slots.countSlotsEnabled(true), 1);
+			capacity = Math.max(slots.countSlotsEnabled(true), 1);
 		return capacity;
 	}	
 }

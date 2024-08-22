@@ -20,6 +20,9 @@ import net.minecraft.util.math.BlockPos;
 import com.fabien_gigante.BitsPropertyDelegate;
 import com.fabien_gigante.IDisableableSlots;
 
+import me.jellysquid.mods.lithium.api.inventory.LithiumInventory;
+import me.jellysquid.mods.lithium.common.hopper.InventoryHelper;
+
 @Mixin(HopperBlockEntity.class)
 public abstract class HopperBlockEntityMixin extends LootableContainerBlockEntity implements IDisableableSlots {
 	private static final String KEY_DISABLED_SLOTS = "disabled_slots";
@@ -27,14 +30,25 @@ public abstract class HopperBlockEntityMixin extends LootableContainerBlockEntit
 
 	@Shadow 
 	protected DefaultedList<ItemStack> inventory;
-    protected final BitsPropertyDelegate disabledSlots = new BitsPropertyDelegate(SLOT_COUNT);
-    
+    protected final BitsPropertyDelegate disabledSlots = new BitsPropertyDelegate(SLOT_COUNT) {
+		@Override
+		public void set(int index, int value) {
+			super.set(index, value); 
+			onDisabledSlotsChanged();
+		}
+	};
+
     private HopperBlockEntityMixin(BlockEntityType<?> blockEntityType, BlockPos blockPos, BlockState blockState) {
         super(blockEntityType, blockPos, blockState);
     }
 
 	public BitsPropertyDelegate getDisableableSlots() { return this.disabledSlots; }
 
+	private void onDisabledSlotsChanged() {
+		if (this instanceof LithiumInventory lithiumInventory)
+			InventoryHelper.getLithiumStackList(lithiumInventory).changed();
+	}
+    
 	private boolean canToggleSlot(int slot) {
 		return slot >= 0 && slot < SLOT_COUNT && this.inventory.get(slot).isEmpty();
 	}
