@@ -11,7 +11,7 @@ import net.minecraft.inventory.Inventory;
 
 @Mixin(HopperHelper.class)
 public class HopperHelperMixin {
-    
+	
 	@Redirect(method = "determineComparatorUpdatePattern", 
 		at = @At(value = "INVOKE", target = "Lnet/minecraft/inventory/Inventory;size()I", ordinal = 1))
 	private static int capacity_1(Inventory inventory) { return IDisableableSlots.getCapacity(inventory); }

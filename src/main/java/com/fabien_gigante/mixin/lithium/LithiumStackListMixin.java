@@ -18,15 +18,15 @@ import com.fabien_gigante.IDisableableSlots;
 
 @Mixin(LithiumStackList.class)
 public abstract class LithiumStackListMixin implements List<ItemStack>  {
-    private float ratioCapacity = 1;
+	private float ratioCapacity = 1;
 
-    @Inject(method = "getSignalStrength", at=@At(
-        value = "INVOKE", target = "Lme/jellysquid/mods/lithium/common/hopper/LithiumStackList;calculateSignalStrength(I)I", shift = Shift.BEFORE
-    ))
-    public void calculateCapacity(Inventory inventory, CallbackInfoReturnable<Integer> ci) {
-        this.ratioCapacity = Math.min(inventory.size(), this.size()) / IDisableableSlots.getCapacity(inventory);
-    }
-    
-    @ModifyVariable(method = "calculateSignalStrength", at = @At(value = "STORE", ordinal = 2), index = 3, remap = false)
-    private float adjustCapacity(float f) { return f * (float)this.ratioCapacity; }
+	@Inject(method = "getSignalStrength", at=@At(
+		value = "INVOKE", target = "Lme/jellysquid/mods/lithium/common/hopper/LithiumStackList;calculateSignalStrength(I)I", shift = Shift.BEFORE
+	))
+	public void calculateCapacity(Inventory inventory, CallbackInfoReturnable<Integer> ci) {
+		this.ratioCapacity = Math.min(inventory.size(), this.size()) / IDisableableSlots.getCapacity(inventory);
+	}
+	
+	@ModifyVariable(method = "calculateSignalStrength", at = @At(value = "STORE", ordinal = 2), index = 3, remap = false)
+	private float adjustCapacity(float f) { return f * (float)this.ratioCapacity; }
 }

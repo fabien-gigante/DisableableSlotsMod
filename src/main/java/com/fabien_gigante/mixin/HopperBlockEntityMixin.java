@@ -26,11 +26,11 @@ import me.jellysquid.mods.lithium.common.hopper.InventoryHelper;
 @Mixin(HopperBlockEntity.class)
 public abstract class HopperBlockEntityMixin extends LootableContainerBlockEntity implements IDisableableSlots {
 	private static final String KEY_DISABLED_SLOTS = "disabled_slots";
-    private static final int SLOT_COUNT = HopperScreenHandler.SLOT_COUNT;
+	private static final int SLOT_COUNT = HopperScreenHandler.SLOT_COUNT;
 
 	@Shadow 
 	protected DefaultedList<ItemStack> inventory;
-    protected final BitsPropertyDelegate disabledSlots = new BitsPropertyDelegate(SLOT_COUNT) {
+	protected final BitsPropertyDelegate disabledSlots = new BitsPropertyDelegate(SLOT_COUNT) {
 		@Override
 		public void set(int index, int value) {
 			super.set(index, value); 
@@ -38,9 +38,9 @@ public abstract class HopperBlockEntityMixin extends LootableContainerBlockEntit
 		}
 	};
 
-    private HopperBlockEntityMixin(BlockEntityType<?> blockEntityType, BlockPos blockPos, BlockState blockState) {
-        super(blockEntityType, blockPos, blockState);
-    }
+	private HopperBlockEntityMixin(BlockEntityType<?> blockEntityType, BlockPos blockPos, BlockState blockState) {
+		super(blockEntityType, blockPos, blockState);
+	}
 
 	public BitsPropertyDelegate getDisableableSlots() { return this.disabledSlots; }
 
@@ -48,7 +48,7 @@ public abstract class HopperBlockEntityMixin extends LootableContainerBlockEntit
 		if (this instanceof LithiumInventory lithiumInventory)
 			InventoryHelper.getLithiumStackList(lithiumInventory).changed();
 	}
-    
+	
 	private boolean canToggleSlot(int slot) {
 		return slot >= 0 && slot < SLOT_COUNT && this.inventory.get(slot).isEmpty();
 	}
@@ -63,27 +63,27 @@ public abstract class HopperBlockEntityMixin extends LootableContainerBlockEntit
 		}
 	}
 
-    @Inject(method="setStack", at=@At("HEAD"))
-    private void setStack (int slot, ItemStack stack, CallbackInfo ci) {
+	@Inject(method="setStack", at=@At("HEAD"))
+	private void setStack (int slot, ItemStack stack, CallbackInfo ci) {
 		if (this.isSlotDisabled(slot)) this.enableSlot(slot);
-    }
+	}
 
-    @Override
-    public boolean isValid(int slot, ItemStack stack) {
-         return this.isSlotEnabled(slot) && super.isValid(slot, stack);
-    }
+	@Override
+	public boolean isValid(int slot, ItemStack stack) {
+		return this.isSlotEnabled(slot) && super.isValid(slot, stack);
+	}
 
-    @Inject(method="writeNbt", at=@At("TAIL"))
-    private void writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup, CallbackInfo ci) {
+	@Inject(method="writeNbt", at=@At("TAIL"))
+	private void writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup, CallbackInfo ci) {
 		int[] disabled = this.disabledSlots.find(1).toArray();
 		if (disabled.length > 0) nbt.putIntArray(KEY_DISABLED_SLOTS, disabled);
-    }
+	}
 
-    @Inject(method="readNbt", at=@At("TAIL"))
+	@Inject(method="readNbt", at=@At("TAIL"))
 	private void readNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup, CallbackInfo ci) {
 		this.disabledSlots.reset();
 		for (int i : nbt.getIntArray(KEY_DISABLED_SLOTS))
 			if (this.canToggleSlot(i)) this.disabledSlots.set(i, 1);
-    }
+	}
 
 }

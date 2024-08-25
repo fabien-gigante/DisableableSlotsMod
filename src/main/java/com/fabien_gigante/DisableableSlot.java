@@ -5,7 +5,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.screen.slot.Slot;
 
 public class DisableableSlot extends Slot {
-    protected final IDisableableSlots handler;
+	protected final IDisableableSlots handler;
 
 	public DisableableSlot(Inventory inventory, int index, int x, int y, IDisableableSlots handler) {
 		super(inventory, index, x, y);

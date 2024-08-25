@@ -24,17 +24,17 @@ import net.minecraft.util.Identifier;
 
 @Mixin(HopperScreen.class)
 public abstract class HopperScreenMixin extends HandledScreen<HopperScreenHandler> implements IDisableableSlots {
-    private static final Identifier DISABLED_SLOT_TEXTURE = Identifier.ofVanilla("container/crafter/disabled_slot");
+	private static final Identifier DISABLED_SLOT_TEXTURE = Identifier.ofVanilla("container/crafter/disabled_slot");
 	private static final Text TOGGLEABLE_SLOT_TEXT = Text.translatable("gui.togglable_slot");
-    
-    protected PlayerEntity player;
+	
+	protected PlayerEntity player;
 
 	private HopperScreenMixin(HopperScreenHandler handler, PlayerInventory inventory, Text title) { super(handler, inventory, title); }
-    
-    @Inject(method="<init>", at=@At(value="TAIL"))
-    private void init(HopperScreenHandler handler, PlayerInventory playerInventory, Text title, CallbackInfo ci) {
-        this.player = playerInventory.player;
-    }
+	
+	@Inject(method="<init>", at=@At(value="TAIL"))
+	private void init(HopperScreenHandler handler, PlayerInventory playerInventory, Text title, CallbackInfo ci) {
+		this.player = playerInventory.player;
+	}
 
 	@Override
 	protected void onMouseClick(Slot slot, int slotId, int button, SlotActionType actionType) {
@@ -48,7 +48,7 @@ public abstract class HopperScreenMixin extends HandledScreen<HopperScreenHandle
 					ItemStack itemStack = this.player.getInventory().getStack(button);
 					if (this.isSlotDisabled(slotId) && !itemStack.isEmpty()) this.enableSlot(slotId);
 					break;
-                default:
+				default:
 			}
 		}
 		super.onMouseClick(slot, slotId, button, actionType);
@@ -73,7 +73,7 @@ public abstract class HopperScreenMixin extends HandledScreen<HopperScreenHandle
 	protected void drawDisabledSlot(DrawContext context, Slot slot) {
 		context.drawGuiTexture(DISABLED_SLOT_TEXTURE, slot.x - 1, slot.y - 1, 18, 18);
 	}
-    
+	
 	@Inject(method="render", at=@At(value="TAIL"))
 	private void renderTooltip(DrawContext context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
 		if (this.focusedSlot instanceof DisableableSlot slot && !isSlotDisabled(slot.id)
