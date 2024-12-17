@@ -6,7 +6,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 import com.fabien_gigante.IDisableableSlots;
 
-import me.jellysquid.mods.lithium.common.hopper.HopperHelper;
+import net.caffeinemc.mods.lithium.common.hopper.HopperHelper;
 import net.minecraft.inventory.Inventory;
 
 @Mixin(HopperHelper.class)

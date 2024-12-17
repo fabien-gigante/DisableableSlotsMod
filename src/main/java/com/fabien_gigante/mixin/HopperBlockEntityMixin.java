@@ -20,8 +20,8 @@ import net.minecraft.util.math.BlockPos;
 import com.fabien_gigante.BitsPropertyDelegate;
 import com.fabien_gigante.IDisableableSlots;
 
-import me.jellysquid.mods.lithium.api.inventory.LithiumInventory;
-import me.jellysquid.mods.lithium.common.hopper.InventoryHelper;
+import net.caffeinemc.mods.lithium.api.inventory.LithiumInventory;
+import net.caffeinemc.mods.lithium.common.hopper.InventoryHelper;
 
 @Mixin(HopperBlockEntity.class)
 public abstract class HopperBlockEntityMixin extends LootableContainerBlockEntity implements IDisableableSlots {

@@ -11,6 +11,7 @@ import com.fabien_gigante.IDisableableSlots;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.screen.ingame.HopperScreen;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
@@ -71,7 +72,7 @@ public abstract class HopperScreenMixin extends HandledScreen<HopperScreenHandle
 	}
 
 	protected void drawDisabledSlot(DrawContext context, Slot slot) {
-		context.drawGuiTexture(DISABLED_SLOT_TEXTURE, slot.x - 1, slot.y - 1, 18, 18);
+		context.drawGuiTexture(RenderLayer::getGuiTextured, DISABLED_SLOT_TEXTURE, slot.x - 1, slot.y - 1, 18, 18);
 	}
 	
 	@Inject(method="render", at=@At(value="TAIL"))

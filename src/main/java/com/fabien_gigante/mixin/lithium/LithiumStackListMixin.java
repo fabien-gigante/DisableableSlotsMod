@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 
-import me.jellysquid.mods.lithium.common.hopper.LithiumStackList;
+import net.caffeinemc.mods.lithium.common.hopper.LithiumStackList;
 
 import com.fabien_gigante.IDisableableSlots;
 
@@ -21,7 +21,7 @@ public abstract class LithiumStackListMixin implements List<ItemStack>  {
 	private float ratioCapacity = 1;
 
 	@Inject(method = "getSignalStrength", at=@At(
-		value = "INVOKE", target = "Lme/jellysquid/mods/lithium/common/hopper/LithiumStackList;calculateSignalStrength(I)I", shift = Shift.BEFORE
+		value = "INVOKE", target = "Lnet/caffeinemc/mods/lithium/common/hopper/LithiumStackList;calculateSignalStrength(I)I", shift = Shift.BEFORE
 	))
 	public void calculateCapacity(Inventory inventory, CallbackInfoReturnable<Integer> ci) {
 		this.ratioCapacity = Math.min(inventory.size(), this.size()) / IDisableableSlots.getCapacity(inventory);
