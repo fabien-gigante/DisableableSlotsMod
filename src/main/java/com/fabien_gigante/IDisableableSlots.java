@@ -17,9 +17,8 @@ public interface IDisableableSlots {
 	}
 
 	public static int getCapacity(Inventory inventory) {
-		int capacity = inventory.size();
-		if (inventory instanceof IDisableableSlots slots)
-			capacity = Math.max(slots.countSlotsEnabled(true), 1);
-		return capacity;
-	}	
+		return (inventory instanceof IDisableableSlots slots)
+			? Math.max(slots.countSlotsEnabled(true), 1) 
+			: inventory.size();
+	}
 }
