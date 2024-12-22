@@ -1,6 +1,6 @@
 ![Icon](./src/main/resources/assets/icon.png)
-# Disableable Hopper Slots
-Welcome to the *Disableable Hopper Slots* Minecraft mod.
+# Disableable Slots
+Welcome to the *Disableable Slots* Minecraft mod.
 
 Are you tired of filling your item filters with dummy items ? Are you bored of farming nine stacks of items to entirely fill a dispenser or dropper ? Do you like how the new crafter allows to enable and disable some of its slots ? Well, this mod is for you !
 

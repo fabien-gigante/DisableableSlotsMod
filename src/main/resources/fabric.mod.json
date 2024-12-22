@@ -1,29 +1,29 @@
 {
 	"schemaVersion": 1,
-	"id": "disableable-hopper-slots",
+	"id": "disableable-slots",
 	"version": "${version}",
-	"name": "Disableable Hopper Slots",
-	"description": "Hopper, dispenser and dropper slots can now be enabled or disabled, which can be toggled by clicking on them when empty.",
+	"name": "Disableable Slots",
+	"description": "Hopper, dispenser and dropper slots can now be enabled or disabled. Those slots can be toggled by clicking on them when empty.",
 	"authors": ["Fabien Gigante"],
 	"contact": {
-		"homepage": "https://github.com/fabien-gigante/DisableableHopperSlotsMod",
-		"sources": "https://github.com/fabien-gigante/DisableableHopperSlotsMod"
+		"homepage": "https://github.com/fabien-gigante/DisableableSlotsMod",
+		"sources": "https://github.com/fabien-gigante/DisableableSlotsMod"
 	},
 	"license": "CC0-1.0",
 	"icon": "assets/icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"com.fabien_gigante.DisableableHopperSlotsMod"
+			"com.fabien_gigante.DisableableSlotsMod"
 		],
 		"client": [
-			"com.fabien_gigante.DisableableHopperSlotsModClient"
+			"com.fabien_gigante.DisableableSlotsModClient"
 		]
 	},
 	"mixins": [
-		"DisableableHopperSlotsMod.mixins.json",
+		"DisableableSlotsMod.mixins.json",
 		{
-			"config": "DisableableHopperSlotsMod.client.mixins.json",
+			"config": "DisableableSlotsMod.client.mixins.json",
 			"environment": "client"
 		}
 	],
