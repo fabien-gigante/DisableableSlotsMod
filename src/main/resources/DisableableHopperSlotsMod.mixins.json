@@ -5,6 +5,8 @@
 	"mixins": [
 		"HopperBlockEntityMixin",
 		"HopperScreenHandlerMixin",
+		"Generic3x3ContainerScreenHandlerMixin",
+		"DispenserBlockEntityMixin",
 		"ServerPlayNetworkHandlerMixin",
 		"ScreenHandlerMixin",
 		"lithium.LithiumStackListMixin",

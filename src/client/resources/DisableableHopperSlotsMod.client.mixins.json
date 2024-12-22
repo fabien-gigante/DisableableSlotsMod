@@ -3,7 +3,7 @@
 	"package": "com.fabien_gigante.mixin",
 	"compatibilityLevel": "JAVA_21",
 	"client": [
-		"HopperScreenMixin"
+		"HopperScreenMixin", "Generic3x3ContainerScreenMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

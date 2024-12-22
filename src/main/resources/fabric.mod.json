@@ -3,7 +3,7 @@
 	"id": "disableable-hopper-slots",
 	"version": "${version}",
 	"name": "Disableable Hopper Slots",
-	"description": "Hopper slots can now be enabled or disabled, which can be toggled by clicking on them when empty.",
+	"description": "Hopper, dispenser and dropper slots can now be enabled or disabled, which can be toggled by clicking on them when empty.",
 	"authors": ["Fabien Gigante"],
 	"contact": {
 		"homepage": "https://github.com/fabien-gigante/DisableableHopperSlotsMod",
