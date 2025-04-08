@@ -82,7 +82,7 @@ public abstract class DispenserBlockEntityMixin extends LootableContainerBlockEn
 	@Inject(method="readNbt", at=@At("TAIL"))
 	private void readNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup, CallbackInfo ci) {
 		this.disabledSlots.reset();
-		for (int i : nbt.getIntArray(KEY_DISABLED_SLOTS))
+		for (int i : nbt.getIntArray(KEY_DISABLED_SLOTS).orElse(new int[0]))
 			if (this.canToggleSlot(i)) this.disabledSlots.set(i, 1);
 	}
 
