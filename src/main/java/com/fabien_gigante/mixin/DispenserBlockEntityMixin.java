@@ -11,8 +11,8 @@ import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.block.entity.DispenserBlockEntity;
 import net.minecraft.block.entity.LootableContainerBlockEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.storage.ReadView;
+import net.minecraft.storage.WriteView;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 
@@ -73,17 +73,18 @@ public abstract class DispenserBlockEntityMixin extends LootableContainerBlockEn
 		return this.isSlotEnabled(slot) && super.isValid(slot, stack);
 	}
 
-	@Inject(method="writeNbt", at=@At("TAIL"))
-	private void writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup, CallbackInfo ci) {
+	@Inject(method="writeData", at=@At("TAIL"))
+	private void writeData(WriteView view, CallbackInfo ci) {
 		int[] disabled = this.disabledSlots.find(1).toArray();
-		if (disabled.length > 0) nbt.putIntArray(KEY_DISABLED_SLOTS, disabled);
+		if (disabled.length > 0) view.putIntArray(KEY_DISABLED_SLOTS, disabled);
 	}
 
-	@Inject(method="readNbt", at=@At("TAIL"))
-	private void readNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup, CallbackInfo ci) {
+	@Inject(method="readData", at=@At("TAIL"))
+	private void readData(ReadView view, CallbackInfo ci) {
 		this.disabledSlots.reset();
-		for (int i : nbt.getIntArray(KEY_DISABLED_SLOTS).orElse(new int[0]))
-			if (this.canToggleSlot(i)) this.disabledSlots.set(i, 1);
+		view.getOptionalIntArray(KEY_DISABLED_SLOTS).ifPresent((slots) -> { 
+			for (int i : slots) if (this.canToggleSlot(i)) this.disabledSlots.set(i, 1);
+		});
 	}
 
 }

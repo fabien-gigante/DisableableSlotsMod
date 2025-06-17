@@ -9,10 +9,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import com.fabien_gigante.DisableableSlot;
 import com.fabien_gigante.IDisableableSlots;
 
+import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
-import net.minecraft.client.render.RenderLayer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
@@ -82,7 +82,7 @@ public abstract class HandledScreenMixin<T extends ScreenHandler> extends Screen
 	}
 
 	private void drawDisabledSlot(DrawContext context, Slot slot) {
-		context.drawGuiTexture(RenderLayer::getGuiTextured, DISABLED_SLOT_TEXTURE, slot.x - 1, slot.y - 1, 18, 18);
+		context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, DISABLED_SLOT_TEXTURE, slot.x - 1, slot.y - 1, 18, 18);
 	}
 	
 	@Inject(method="render", at=@At(value="TAIL"))
