@@ -3,6 +3,7 @@ package com.fabien_gigante.mixin;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
@@ -87,4 +88,11 @@ public abstract class DispenserBlockEntityMixin extends LootableContainerBlockEn
 		});
 	}
 
+	@Redirect(
+        method = "addToFirstFreeSlot",
+        at = @At(value = "INVOKE", target = "Lnet/minecraft/util/collection/DefaultedList;get(I)Ljava/lang/Object;")
+    )
+    private Object getStackIfEnabled(DefaultedList<ItemStack> inventory, int slot) {
+        return this.isSlotEnabled(slot) ? inventory.get(slot) : INVALID_STACK;
+    }	
 }

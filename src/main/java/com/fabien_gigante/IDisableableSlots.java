@@ -1,8 +1,12 @@
 package com.fabien_gigante;
 
 import net.minecraft.inventory.Inventory;
+import net.minecraft.item.Items;
+import net.minecraft.item.ItemStack;
 
 public interface IDisableableSlots {
+	public static ItemStack INVALID_STACK = new ItemStack(Items.BARRIER, Items.BARRIER.getMaxCount());
+
 	public boolean isSlotEnabled(int id);
 	public default boolean isSlotDisabled(int id) { return !isSlotEnabled(id); }
 
