@@ -5,7 +5,8 @@ import org.slf4j.LoggerFactory;
 import net.fabricmc.api.ModInitializer;
 
 public class DisableableSlotsMod implements ModInitializer {
-	public static final Logger LOGGER = LoggerFactory.getLogger("Disableable-slots");
+	public static final String MOD_ID = "disableable_slots";
+	public static final Logger LOGGER = LoggerFactory.getLogger("Disableable Slots");
 	
 	// Server-side mod entry point
 	@Override

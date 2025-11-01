@@ -1,6 +1,6 @@
 {
 	"schemaVersion": 1,
-	"id": "disableable-slots",
+	"id": "disableable_slots",
 	"version": "${version}",
 	"name": "Disableable Slots",
 	"description": "Hopper, dispenser and dropper slots can now be enabled or disabled. Those slots can be toggled by clicking on them when empty.",
