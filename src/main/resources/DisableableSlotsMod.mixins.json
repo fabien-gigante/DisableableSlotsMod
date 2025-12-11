@@ -4,11 +4,11 @@
 	"compatibilityLevel": "JAVA_21",
 	"mixins": [
 		"HopperBlockEntityMixin",
-		"HopperScreenHandlerMixin",
-		"Generic3x3ContainerScreenHandlerMixin",
+		"HopperMenuMixin",
+		"DispenserMenuMixin",
 		"DispenserBlockEntityMixin",
-		"ServerPlayNetworkHandlerMixin",
-		"ScreenHandlerMixin",
+		"ServerGamePacketListenerImplMixin",
+		"AbstractContainerMenuMixin",
 		"lithium.LithiumStackListMixin",
 		"lithium.HopperHelperMixin"
 	],

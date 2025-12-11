@@ -1,19 +1,19 @@
 package com.fabien_gigante;
 
-import net.minecraft.inventory.Inventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.screen.slot.Slot;
+import net.minecraft.world.Container;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
 public class DisableableSlot extends Slot {
-	protected final IDisableableSlots handler;
+	protected final IDisableableSlots menu;
 
-	public DisableableSlot(Inventory inventory, int index, int x, int y, IDisableableSlots handler) {
+	public DisableableSlot(Container inventory, int index, int x, int y, IDisableableSlots handler) {
 		super(inventory, index, x, y);
-		this.handler = handler;
+		this.menu = handler;
 	}
 
 	@Override
-	public boolean canInsert(ItemStack stack) {
-		return handler.isSlotEnabled(this.id) && super.canInsert(stack);
+	public boolean mayPlace(ItemStack stack) {
+		return menu.isSlotEnabled(this.index) && super.mayPlace(stack);
 	}    
 }

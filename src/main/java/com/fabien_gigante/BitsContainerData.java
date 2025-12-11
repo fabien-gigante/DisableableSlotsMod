@@ -1,14 +1,13 @@
 package com.fabien_gigante;
 
 import java.util.stream.IntStream;
+import net.minecraft.world.inventory.ContainerData;
 
-import net.minecraft.screen.PropertyDelegate;
-
-public class BitsPropertyDelegate implements PropertyDelegate {
+public class BitsContainerData implements ContainerData {
 	private int size;
 	private long bits;
 
-	public BitsPropertyDelegate(int size) { 
+	public BitsContainerData(int size) { 
 		assert size <= 64;
 		this.size = size; 
 	}
@@ -24,7 +23,7 @@ public class BitsPropertyDelegate implements PropertyDelegate {
 	}
 
 	@Override
-	public int size() { return this.size; }
+	public int getCount() { return this.size; }
 
 	public IntStream find(int value) {
 		assert value == 0 || value == 1;
