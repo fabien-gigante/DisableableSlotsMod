@@ -10,7 +10,7 @@ import com.fabien_gigante.DisableableSlot;
 import com.fabien_gigante.IDisableableSlots;
 import com.mojang.blaze3d.platform.cursor.CursorTypes;
 
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.RenderPipelines;
@@ -21,14 +21,14 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.ContainerInput;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 
 @Mixin(AbstractContainerScreen.class)
 public abstract class AbstractContainerScreenMixin<T extends AbstractContainerMenu> extends Screen implements IDisableableSlots {
 	private static final Identifier DISABLED_SLOT_TEXTURE = Identifier.withDefaultNamespace("container/crafter/disabled_slot");
-	private static final Component TOGGLEABLE_SLOT_TEXT = Component.translatable("gui.togglable_slot");
+	private static final Component DISABLED_SLOT_TOOLTIP  = Component.translatable("gui.togglable_slot");
 
     @Shadow
     protected T menu;
@@ -38,19 +38,20 @@ public abstract class AbstractContainerScreenMixin<T extends AbstractContainerMe
     protected Slot hoveredSlot;
 	protected Player player;
 
-	private AbstractContainerScreenMixin(T menu, Inventory inventory, Component title) { super(title); }
+	private AbstractContainerScreenMixin() { super(null); }
+
     @Shadow
     abstract protected void handleSlotStateChanged(int slotId, int handlerId, boolean newState);     
 	
-	@Inject(method="<init>", at=@At(value="TAIL"))
-	private void init(T menu, Inventory inventory, Component title, CallbackInfo ci) {
+	@Inject(method="<init>(Lnet/minecraft/world/inventory/AbstractContainerMenu;Lnet/minecraft/world/entity/player/Inventory;Lnet/minecraft/network/chat/Component;II)V", at=@At(value="TAIL"))
+	private void _init(T menu, Inventory inventory, Component title, int imageWidth, int imageHeight, CallbackInfo ci) {
 		this.player = inventory.player;
 	}
 
 	@Inject(method="slotClicked", at=@At(value="HEAD"))
-	private void onSlotClick(Slot slot, int slotId, int button, ClickType actionType, CallbackInfo ci) {
+	private void onSlotClick(Slot slot, int slotId, int button, ContainerInput input, CallbackInfo ci) {
 		if (slot instanceof DisableableSlot && !slot.hasItem() && !this.player.isSpectator()) {
-			switch (actionType) {
+			switch (input) {
 				case PICKUP:
 					if (this.isSlotDisabled(slotId)) this.enableSlot(slotId);
 					else if (this.menu.getCarried().isEmpty()) this.disableSlot(slotId);
@@ -76,27 +77,27 @@ public abstract class AbstractContainerScreenMixin<T extends AbstractContainerMe
 		this.player.playSound((SoundEvent)SoundEvents.UI_BUTTON_CLICK.value(), 0.4F, f);
 	}
 
-	@Inject(method="renderSlot", at=@At(value="HEAD"), cancellable=true)
-	private void renderSlot(GuiGraphics graphics, Slot slot, int x, int y, CallbackInfo ci) {
+	@Inject(method="extractSlot", at=@At(value="HEAD"), cancellable=true)
+	private void extractSlot(GuiGraphicsExtractor graphics, Slot slot, int x, int y, CallbackInfo ci) {
 		if (slot instanceof DisableableSlot) {
 			int left = this.leftPos + slot.x - 2, top = this.topPos + slot.y - 2;
 			if (x > left && y > top && x < left + 19 && y < top + 19)
-            	graphics.requestCursor(CursorTypes.POINTING_HAND);
+				graphics.requestCursor(CursorTypes.POINTING_HAND);
 			if (isSlotDisabled(slot.index)) {
-				this.renderDisabledSlot(graphics, slot);
+				this.extractDisabledSlot(graphics, slot);
             	ci.cancel();
 			}
         }
 	}
 
-	private void renderDisabledSlot(GuiGraphics graphics, Slot slot) {
+	private void extractDisabledSlot(GuiGraphicsExtractor graphics, Slot slot) {
 		graphics.blitSprite(RenderPipelines.GUI_TEXTURED, DISABLED_SLOT_TEXTURE, slot.x - 1, slot.y - 1, 18, 18);
 	}
 	
-	@Inject(method="render", at=@At(value="TAIL"))
-	private void renderTooltip(GuiGraphics graphics, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+	@Inject(method="extractRenderState", at=@At(value="TAIL"))
+	private void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a, CallbackInfo ci) {
 		if (this.hoveredSlot instanceof DisableableSlot slot && !isSlotDisabled(slot.index)
 			&& this.menu.getCarried().isEmpty() && !slot.hasItem() && !this.player.isSpectator())
-				graphics.setTooltipForNextFrame(this.font, TOGGLEABLE_SLOT_TEXT, mouseX, mouseY);
+				graphics.setTooltipForNextFrame(this.font, DISABLED_SLOT_TOOLTIP, mouseX, mouseY);
 	}
 }
